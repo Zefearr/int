@@ -1,0 +1,79 @@
+
+.icon {  
+    background-image:  url('../../assets/images/sprites/sprite-baf6dab1.svg');                    
+}
+.no-svg .icon {
+    background-image:  url('../../assets/images/sprites/sprite-baf6dab1.png');                   
+}
+
+
+.icon--arrow { 
+    width: 34px;  
+    height: 21.01px;
+    
+    background-position: 0 0;    
+}
+
+
+.icon--close_icon { 
+    width: 34px;  
+    height: 34px;
+    
+    background-position: 0 37.517857142857146%;    
+}
+
+
+.icon--facebook { 
+    width: 34px;  
+    height: 33.96px;
+    
+    background-position: 33.333333333333336% 0;    
+}
+
+
+.icon--handler { 
+    width: 22px;  
+    height: 22px;
+    
+    background-position: 89.47368421052632% 41.19117647058823%;    
+}
+
+
+.icon--linkendin { 
+    width: 34px;  
+    height: 34px;
+    
+    background-position: 66.66666666666667% 0;    
+}
+
+
+.icon--mr_dot_lemon { 
+    width: 23.68px;  
+    height: 34px;
+    
+    background-position: 0 98.23214285714288%;    
+}
+
+
+.icon--mr_dot_simple { 
+    width: 26.23px;  
+    height: 34px;
+    
+    background-position: 21.572378609820536% 98.23214285714288%;    
+}
+
+
+.icon--mr_dot_simple_water_melon { 
+    width: 24.12px;  
+    height: 34px;
+    
+    background-position: 44.61029674651412% 98.23214285714288%;    
+}
+
+
+.icon--twitter { 
+    width: 34px;  
+    height: 28.01px;
+    
+    background-position: 100% 0;    
+}

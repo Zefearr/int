@@ -1,18 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge"> 
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link href="https://fonts.googleapis.com/css?family=Hepta+Slab:300,600,800&display=swap" rel="stylesheet">
+  <!--build:css /assets/styles/styles.css-->
   <link rel="stylesheet" href="temp/styles/styles.css">
-  <title>Document</title>  
-</head> 
-<body>  
-<p>asdasdasdsaada23232333223332332323231232</p>            
-<h2>asd</h2>  
-<script src="/temp/scripts/app.js" async></script>  
-<script id="__bs_script__">//<![CDATA[
-  document.write("<script async src='http://HOST:3000/browser-sync/browser-sync-client.js?v=2.26.7'><\/script>".replace("HOST", location.hostname));
-//]]></script>
+  <!--endbuild---->
+  <title>Meh</title>
+
+</head>
+
+<body>
+
+  <!-- <div class="audio-ui">
+    <div class="audio-ui__wrapper">
+      <div class="playWrapper">
+        <input type="checkbox" class="playToggler" id="playSound">
+        <span class="playBtn">
+          <span class="triangle"></span>
+          <span class="pause"></span>
+        </span>
+      </div>
+
+      <div class="playWrapper">
+        <input type="checkbox" class="stopToggler" id="muteSound">
+        <span class="stopBtn">
+          <span class="mute-active"></span>
+          <span class="mute"></span>
+
+        </span>
+      </div>
+
+    </div>
+ 
+  </div>
+
+
+  <video id="video" loop crossOrigin="anonymous" webkit-playsinline style="display:none">
+    <source src="assets/videos/vid.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
+  </video>
+
+  <button id="vidPlay">Play</button> 
+  <button id="vidStop">Stop</button> -->
+  <div id="webgl"></div>
+  <div class="controls">
+    <div class="controls__inner">
+      <div class="controls__icons-container">
+        <span class="sun"></span>
+        <span class="moon"></span>
+      </div>
+      <label class="switch">
+        <input type="checkbox" id="lightToggler">
+        <span class="slider round"></span>
+      </label>
+     
+
+
+
+    </div>
+
+  </div>
+  <div class="aboutThisPage" id="aboutScreen">
+   <div class="aboutThisPage__content">
+      <h1 class="aboutThisPage__title">About</h1>
+    <p>This interior scene is made using <a href="#">THREE.JS</a></p>
+    <p>Modeling and UV done in Maya, texturing in Substance Painter </p>
+    <p>© 2019</p>
+   </div>
+   <span id="closeOv" class="closeIcon"></span>
+  </div>
+  <span id="aboutBtn" class="why"></span>
+
+  <script type="x-shader/x-vertex" id="vertexshader">
+    varying vec2 vUv;
+    void main() {
+      vUv = uv;
+      gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+    }
+  </script>
+
+  <script type="x-shader/x-fragment" id="fragmentshader">
+    uniform sampler2D baseTexture; 
+    uniform sampler2D bloomTexture;
+    varying vec2 vUv;
+    vec4 getTexture( sampler2D texelToLinearTexture ) {
+      return mapTexelToLinear( texture2D( texelToLinearTexture , vUv ) );
+    }
+    void main() {
+      gl_FragColor = ( getTexture( baseTexture ) + vec4( 1.0 ) * getTexture( bloomTexture ) );
+    }
+  </script>
+
+  <script src="temp/scripts/app.js" async></script>
+
 </body>
-</html>  
+
+</html>

@@ -1,0 +1,98 @@
+.splash-screen {
+    position: fixed;
+    left:0;
+    top:0;
+    width:100vw;
+    height:100vh;
+    display:flex;
+    transition:1s all ease-out;
+    z-index:99;
+    background: #00b7ea; /* Old browsers */
+    background: -moz-radial-gradient(center, ellipse cover,  #00b7ea 0%, #008fb7 100%); /* FF3.6-15 */
+    background: -webkit-radial-gradient(center, ellipse cover,  #00b7ea 0%,#008fb7 100%); /* Chrome10-25,Safari5.1-6 */
+    background: radial-gradient(ellipse at center,  #00b7ea 0%,#008fb7 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00b7ea', endColorstr='#008fb7',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+
+
+
+    h3 {
+      font-size:32px;
+      text-align:center;
+      color:#fff;
+    }
+}
+.splash-screen.dissolving {
+  opacity:0;
+  visibility: hidden;
+}
+.splash--inner {
+  display:block;
+  margin:auto;
+  border:1px solid #fff;
+  text-align:center;
+  &::after {
+    content:'';
+    display:block;
+    clear: both;
+  }
+}
+
+
+
+.lds-ellipsis {
+  width: 64px;
+  height: 64px;
+  display: inline-block;
+  position: relative;
+ 
+}
+.lds-ellipsis div {
+  position: absolute;
+  top: 27px;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #fff;
+  animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+.lds-ellipsis div:nth-child(1) {
+  left: 6px;
+  animation: lds-ellipsis1 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(2) {
+  left: 6px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(3) {
+  left: 26px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(4) {
+  left: 45px;
+  animation: lds-ellipsis3 0.6s infinite;
+}
+@keyframes lds-ellipsis1 {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes lds-ellipsis3 {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+@keyframes lds-ellipsis2 {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(19px, 0);
+  }
+}
+ 

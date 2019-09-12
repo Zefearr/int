@@ -1,0 +1,46 @@
+.aboutThisPage {
+  width:100%;
+  height:100%;
+  background-color:rgba(255,255,255, 0.95);
+  position: fixed;
+  left:0;
+  top:0;
+  display:flex;
+  opacity: 0;
+  visibility: hidden;
+  
+
+  &__content {
+    max-width:700px;
+    margin:auto;
+  }
+  &.expanded {
+    opacity: 1;
+    visibility:visible;
+  }
+  &__title {
+    font-size:32pt;
+    color:#29293d;
+  }
+  p {
+    font-size:16pt;
+  }
+  a {
+    font-weight:600;
+    color:#3385ff;
+    text-decoration:none;
+  }
+  
+}
+.closeIcon {
+  position: fixed;
+  right:20pt;
+  top:20pt;
+  width:48px;
+  height:48px;
+  cursor: pointer;
+  background:url('../../assets/images/close-icon.svg') center no-repeat;
+  &:hover {
+    transform:scale(1.05);
+  }
+}

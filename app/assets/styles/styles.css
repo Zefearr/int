@@ -1,3 +1,8 @@
 @import "normalize.css";   
 @import "modules/_mixins"; 
 @import "modules/_base";
+
+@import "modules/_splash-screen";
+@import "modules/_audio-ui";
+@import "modules/_controls";
+@import "modules/_about";

@@ -1,11 +1,29 @@
-body {
-  margin:0;
-  padding:0;
-}
-* {
-  box-sizing:border-box;
+:root {
+    --primary-color:rgba(13,110,139, 0.75);
+    --overlay-color:rgba(24,39,51, 0.85);
+    --menu-speed:0.75s;
 }
 
-div {
-  columns: 100px 3;
+body { 
+     
+    width:100%;
+    height:100%;
+    overflow-x: hidden; 
+    /* font-family: 'Noto Sans', sans-serif; */
+    font-family: 'Hepta Slab', serif;
+    position: relative; 
+    margin:0;
+    padding:0;
+ } 
+ * {
+   box-sizing:border-box;
+ }
+ #webgl {
+    max-width:100vw;
+    max-height:100vh;
+    overflow: hidden;
+ 
 }
+
+
+
