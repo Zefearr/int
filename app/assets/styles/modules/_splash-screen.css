@@ -13,7 +13,7 @@
     background: radial-gradient(ellipse at center,  #00b7ea 0%,#008fb7 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00b7ea', endColorstr='#008fb7',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 
-
+ 
 
     h3 {
       font-size:32px;
@@ -28,7 +28,7 @@
 .splash--inner {
   display:block;
   margin:auto;
-  border:1px solid #fff;
+ 
   text-align:center;
   &::after {
     content:'';

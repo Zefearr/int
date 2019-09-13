@@ -47,11 +47,9 @@ export const lights = (function () {
 
     getSealingLight: function (intensity) {
       var light = new THREE.PointLight(0xffffe6, intensity);
-      light.distance = 3;
+      light.distance = 4;
       light.decay = 2;
-      // light.castShadow = true;
-      // light.shadow.mapSize.width = 2048;  // default
-      // light.shadow.mapSize.height = 2048; // default
+    
       return light;
     },
 

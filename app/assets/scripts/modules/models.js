@@ -116,7 +116,21 @@ export const models = (function () {
         var stuffMat = materials.initMaterials('standard', 'white');
         var glassMat = materials.initMaterials('basic', 'black');
         var kolpakMat = materials.initMaterials('basic', 0x333333);
-      
+        var karnizMat = materials.initMaterials('standard', 0xffffff);
+        karnizMat.roughness = 0.6;
+        karnizMat.metalness = 0;
+        var plantMat = materials.initMaterials('standard', 'white');
+        plantMat.side = THREE.DoubleSide;
+        plantMat.map = textureLoader.load('./assets/images/textures/plant/plant_diff.jpg');
+        plantMat.normalMap = textureLoader.load('./assets/images/textures/plant/plant_normal.png'); 
+        plantMat.roughness = 1;
+        plantMat.roughnessMap = textureLoader.load('./assets/images/textures/plant/plant_roughness.jpg');
+        plantMat.metalness = 0;
+        var booksMat = materials.initMaterials('standard', 'white');
+        booksMat.map = textureLoader.load('./assets/images/textures/books/books_diff.jpg');
+        booksMat.roughness = 1;
+        booksMat.roughnessMap = textureLoader.load('./assets/images/textures/books/books_roughness.jpg');
+
         kolpakMat.map = textureLoader.load('./assets/images/textures/stuff/stuffs_albedo.jpg');
       
    
@@ -144,12 +158,27 @@ export const models = (function () {
             child.castShadow = true;
             child.receiveShadow = true;
           }
+          if (child.name === 'plant') {
+            child.material = plantMat; 
+            child.castShadow = true;
+            child.receiveShadow = true;
+          }
+          if (child.name === 'books') {
+            child.material = booksMat; 
+            child.castShadow = true;
+            child.receiveShadow = true;
+          }
           if (child.name === 'bulb') {
             child.castShadow = false;
             child.receiveShadow = false;
             child.material = glassMat;
           }
-
+          if (child.name === 'karniz') {
+            child.material = karnizMat;
+            child.castShadow = true;
+            child.receiveShadow = true;
+          
+          }
         });
         
       });
@@ -181,6 +210,64 @@ export const models = (function () {
         })
       });
       return mGrp;
+    },
+    loadPlant: function () {
+      var plantGrp = new THREE.Group();
+      loader.load('./assets/models/plant.fbx', function (object) {
+        
+        var plantMat = materials.initMaterials('standard', 'white');
+        plantMat.map = textureLoader.load('./assets/images/textures/plant/plant_diff.jpg');
+     
+
+        object.material = plantMat;
+        object.castShadow = true;
+        object.receiveShadow = true;
+        plantGrp.add(object); 
+        object.traverse(function (child) {
+          if (child instanceof THREE.Mesh) {
+            child.material = plantMat;
+            child.castShadow = true;
+            child.receiveShadow = true;
+          }
+
+        })
+      });
+      return plantGrp;
+    },
+    loadTree: function () {
+      var treeGrp = new THREE.Group();
+      loader.load('./assets/models/maple.fbx', function (object) {
+        
+        var barkMat = materials.initMaterials('standard', 'white');
+        var leavesMat = materials.initMaterials('standard', 'white');
+        leavesMat.depthWrite = false;
+        barkMat.map = textureLoader.load('./assets/images/textures/bark_diff.png');
+        leavesMat.map = textureLoader.load('./assets/images/textures/branch_diff.png');
+        leavesMat.side = THREE.DoubleSide;
+        leavesMat.transparent = true;
+        leavesMat.alphaMap = textureLoader.load('./assets/images/textures/branch_diff.png');
+
+        // object.material = barkMat;
+        // object.castShadow = true;
+        // object.receiveShadow = true;
+        treeGrp.add(object); 
+        // object.scale.x = 0.01;
+        // object.scale.y = 0.01;
+        // object.scale.z = 0.01;
+        object.traverse(function (child) {
+          if (child.name === 'bark') {
+            child.material = barkMat;
+            child.castShadow = true;
+            child.receiveShadow = true;
+          } else if(child.name === 'leaves') {
+            child.material = leavesMat;
+            child.castShadow = true;
+            child.receiveShadow = true;
+          }
+
+        })
+      }); 
+      return treeGrp; 
     },
 
     loadBooks: function () {

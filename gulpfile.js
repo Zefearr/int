@@ -11,7 +11,9 @@ mixins = require('postcss-mixins'),
 uglify = require('gulp-uglify'),
 imagemin = require('gulp-imagemin'),
 del = require('del'),
-usemin = require('gulp-usemin');
+usemin = require('gulp-usemin'),
+rev = require('gulp-rev'),
+cssnano = require('gulp-cssnano');
  
 gulp.task('styles', function() {
   return gulp.src('./app/assets/styles/styles.css')
@@ -30,6 +32,15 @@ gulp.task('scripts', function(callback) {
     callback();
   });
 });
+
+gulp.task('prevDist', function(){
+  browserSync.init({
+    notify: false,
+    server: {    
+      baseDir: 'docs'    
+   }
+  })
+})
 
 gulp.task('watch', function() {
   browserSync.init({
@@ -53,47 +64,9 @@ gulp.task('waitForStyles', gulp.series('styles', function() {
 
 gulp.task('waitForScripts', gulp.series('scripts', function(cb) {
   browserSync.reload();
-  cb()
+  cb();
 })); 
 
-
-
-// gulp.task('prevDist', function(){
-//   browserSync.init({
-//       notify: false, 
-//       server: {    
-//        baseDir: 'docs'    
-//     }  
-//   }); 
-// })
-
-// gulp.task('deleteDist', ['icons'], function(){
-// return del('./docs'); 
-// })    
-
-
-// gulp.task('moveModels',  ['deleteDist'],  function(){
-// return gulp.src('./app/assets/models/**.fbx')
-//   .pipe(gulp.dest('./docs/assets/models'));
-// })
-// gulp.task('moveTextures', ['deleteDist'],  function(){
-//   return gulp.src('./app/assets/images/**/*.png')
-//       .pipe(gulp.dest('./docs/assets/images/'));
-//   })
-// gulp.task('useminTrigger', ['deleteDist'], function(){
-// gulp.start('usemin')
-// }) 
-// gulp.task('usemin', ['styles', 'scripts'], function(){
-// return gulp.src('./app/index.html')
-//   .pipe(usemin({
-//       css: [function(){return rev()}, function(){return cssnano()}],
-//       js: [function(){return rev()}, function(){return uglify()}] 
-//   }))
-//   .pipe(gulp.dest('./docs'));
-// })
-// gulp.task('build', ['deleteDist', 'useminTrigger', 'moveModels', 'moveTextures']);    
-
-gulp.task('build', function(){console.log('test')});
 
 gulp.task('optimizeImages', function(){
   return gulp.src(['./app/assets/images/**/*', '!./app/assets/images/sprites'])
@@ -102,15 +75,22 @@ gulp.task('optimizeImages', function(){
       interlaced:true,
       multipass: true
     }))
-    .pipe(gulp.dest('./dist/assets/images')); 
+    .pipe(gulp.dest('./docs/assets/images')); 
 }); 
+gulp.task('moveModels', function(){ 
+  return gulp.src(['./app/assets/models/**'])
+    .pipe(gulp.dest('./docs/assets/models')); 
+});
 gulp.task('deleteDist', function() {
-  return del('./dist');
+  return del('./docs');
 });
 gulp.task('usemin', function(){
-  return gulp.src('./app/index.html')
-    .pipe(usemin())
-    .pipe(gulp.dest('./dist'));
+  return gulp.src('./app/index.html') 
+    .pipe(usemin({
+      css: [function(){return rev()}, function(){return cssnano()}],
+      js: [function(){return rev()}, function(){return uglify()}]
+    }))
+    .pipe(gulp.dest('./docs'));
 });
-gulp.task('build',  gulp.series('deleteDist', 'optimizeImages', 'usemin'));  
+gulp.task('build',  gulp.series('deleteDist', 'optimizeImages', 'moveModels', 'usemin'));   
 

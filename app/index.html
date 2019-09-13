@@ -6,45 +6,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link href="https://fonts.googleapis.com/css?family=Hepta+Slab:300,600,800&display=swap" rel="stylesheet">
-  <!--build:css /assets/styles/styles.css-->
+  <link rel="shortcut icon" type="image/png" href="assets/images/favicon.png"/>   
+  <title>Interior</title>
+  <!--build:css assets/styles/styles.css-->
   <link rel="stylesheet" href="temp/styles/styles.css">
-  <!--endbuild---->
-  <title>Meh</title>
+  <!--endbuild--> 
 
 </head>
 
 <body>
-
-  <!-- <div class="audio-ui">
-    <div class="audio-ui__wrapper">
-      <div class="playWrapper">
-        <input type="checkbox" class="playToggler" id="playSound">
-        <span class="playBtn">
-          <span class="triangle"></span>
-          <span class="pause"></span>
-        </span>
-      </div>
-
-      <div class="playWrapper">
-        <input type="checkbox" class="stopToggler" id="muteSound">
-        <span class="stopBtn">
-          <span class="mute-active"></span>
-          <span class="mute"></span>
-
-        </span>
-      </div>
-
-    </div>
- 
-  </div>
-
-
-  <video id="video" loop crossOrigin="anonymous" webkit-playsinline style="display:none">
-    <source src="assets/videos/vid.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
-  </video>
-
-  <button id="vidPlay">Play</button> 
-  <button id="vidStop">Stop</button> -->
   <div id="webgl"></div>
   <div class="controls">
     <div class="controls__inner">
@@ -56,21 +26,16 @@
         <input type="checkbox" id="lightToggler">
         <span class="slider round"></span>
       </label>
-     
-
-
-
     </div>
-
   </div>
   <div class="aboutThisPage" id="aboutScreen">
-   <div class="aboutThisPage__content">
+    <div class="aboutThisPage__content">
       <h1 class="aboutThisPage__title">About</h1>
-    <p>This interior scene is made using <a href="#">THREE.JS</a></p>
-    <p>Modeling and UV done in Maya, texturing in Substance Painter </p>
-    <p>© 2019</p>
-   </div>
-   <span id="closeOv" class="closeIcon"></span>
+      <p>This interior scene is made using <a href="https://threejs.org/" target="blank">THREE.JS</a></p>
+      <p>Modeling and UV done in Maya, texturing in Substance Painter </p>
+      <p>© 2019</p>
+    </div>
+    <span id="closeOv" class="closeIcon"></span>
   </div>
   <span id="aboutBtn" class="why"></span>
 
@@ -94,8 +59,9 @@
     }
   </script>
 
-  <script src="temp/scripts/app.js" async></script>
-
+  <!--build:js assets/scripts/app.js-->
+  <script src="temp/scripts/app.js"></script> 
+  <!--endbuild--> 
 </body>
 
 </html>

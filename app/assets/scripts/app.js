@@ -59,6 +59,9 @@ const scene = (function (ui, lights, materials) {
   renderer.autoClear = false;
 
   var controls = new OrbitControls(camera, renderer.domElement);
+  controls.maxDistance = 10;
+  // controls.maxPolarAngle = Math.PI * 0.495;
+  controls.enableDamping = true;
   controls.screenSpacePanning = true;
 
   scene.add(camera);
@@ -404,8 +407,11 @@ const scene = (function (ui, lights, materials) {
   const stuff = models.loadStuff();
   main_grp.add(stuff);
 
-  const books = models.loadBooks();
-  main_grp.add(books);
+  // const books = models.loadBooks();
+  // main_grp.add(books);
+
+  // const plant = models.loadPlant();
+  // main_grp.add(plant);
 
   var mirr = new THREE.PlaneBufferGeometry(0.49, 1.26);
   var verticalMirror = new Reflector(mirr, {
@@ -464,10 +470,13 @@ const scene = (function (ui, lights, materials) {
   verticalMirror4.rotation.y = -Math.PI / 2;
 
 
-  main_grp.position.y = -1;
+  // const tree = models.loadTree();
+  // main_grp.add(tree);
+
+  main_grp.position.y = -1; 
   scene.add(main_grp);
 
-
+ 
 
 
 
@@ -555,6 +564,7 @@ const scene = (function (ui, lights, materials) {
 
   function animate() {
     requestAnimationFrame(animate);
+    controls.update();
     render();
   }
 
