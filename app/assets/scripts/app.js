@@ -35,7 +35,7 @@ const scene = (function (ui, lights, materials) {
   var scene, camera, clock, renderer, controls, composer, light, params, bloomPass, renderScene, toggleLightsBtn;
   var sceneMats = [];
 
-  var WIDTH = window.innerWidth;
+  var WIDTH = window.innerWidth; 
   var HEIGHT = window.innerHeight;
   RectAreaLightUniformsLib.init();
   var params = {
@@ -161,9 +161,6 @@ const scene = (function (ui, lights, materials) {
       sArr[i].needsUpdate = true;
     }
 
-    console.log(sArr);
-
-
     switch (type) {
       case 'day':
         sc.material.lightMap = roomDaySrc;
@@ -210,7 +207,7 @@ const scene = (function (ui, lights, materials) {
 
   const windowPlane = models.loadWindow();
   main_grp.add(windowPlane);
-  console.log(windowPlane);
+ 
 
   const all = models.loadAll();
   main_grp.add(all);
@@ -235,32 +232,32 @@ const scene = (function (ui, lights, materials) {
  
 
 
-  var gui = new GUI();
+  // var gui = new GUI();
 
-  gui.add(params, 'exposure', 0.1, 2).onChange(function (value) {
+  // gui.add(params, 'exposure', 0.1, 2).onChange(function (value) {
 
-    renderer.toneMappingExposure = Math.pow(value, 4.0);
+  //   renderer.toneMappingExposure = Math.pow(value, 4.0);
 
-  });
+  // });
 
-  gui.add(params, 'bloomThreshold', 0.0, 1.0).onChange(function (value) {
+  // gui.add(params, 'bloomThreshold', 0.0, 1.0).onChange(function (value) {
 
-    bloomPass.threshold = Number(value);
+  //   bloomPass.threshold = Number(value);
 
-  });
+  // });
 
-  gui.add(params, 'bloomStrength', 0.0, 3.0).onChange(function (value) {
+  // gui.add(params, 'bloomStrength', 0.0, 3.0).onChange(function (value) {
 
-    bloomPass.strength = Number(value);
+  //   bloomPass.strength = Number(value);
 
-  });
+  // });
 
-  gui.add(params, 'bloomRadius', 0.0, 1.0).step(0.01).onChange(function (value) {
+  // gui.add(params, 'bloomRadius', 0.0, 1.0).step(0.01).onChange(function (value) {
 
-    bloomPass.radius = Number(value);
+  //   bloomPass.radius = Number(value);
 
-  });
-  gui.open();
+  // });
+  // gui.open();
 
   window.onresize = function () {
     var width = window.innerWidth;
