@@ -4,12 +4,17 @@ import { materials } from './modules/materials';
 import { models } from './modules/models';
 import { lights } from './modules/lights';
 import { Reflector } from 'three/examples/jsm/objects/Reflector.js';
+import { GUI } from 'three/examples/jsm/libs/dat.gui.module';
+import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
+
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 import About from './modules/about';
 const about = new About();
+// import Manager from './modules/manager';
+// const manager = new Manager();
 
 const ui = (function () {
   let domStrings = {
@@ -27,34 +32,36 @@ const scene = (function (ui, lights, materials) {
   const audio = new Audio();
   var toggleLightsBtn = document.getElementById('lightToggler');
 
-  var scene,  camera, clock,  renderer,  controls, composer,  light, params, bloomPass, renderScene, toggleLightsBtn;
+  var scene, camera, clock, renderer, controls, composer, light, params, bloomPass, renderScene, toggleLightsBtn;
+  var sceneMats = [];
 
   var WIDTH = window.innerWidth;
   var HEIGHT = window.innerHeight;
   RectAreaLightUniformsLib.init();
-
   var params = {
     exposure: 1,
-    bloomStrength: 0.5,
+    bloomStrength: 0.3,
     bloomThreshold: 0,
-    bloomRadius: 1
+    bloomRadius: 0.7
   };
 
   clock = new THREE.Clock();
 
-  camera = new THREE.PerspectiveCamera(55, WIDTH / HEIGHT, 0.1, 100);
+  camera = new THREE.PerspectiveCamera(45, WIDTH / HEIGHT, 0.1, 1000);
   camera.position.z = 0;
-  camera.position.x = -3.1;
+  camera.position.x = -3.5;
+
   camera.position.y = 0;
 
   renderer = new THREE.WebGLRenderer({ antialias: true });
+  var textureLoader = new THREE.TextureLoader();
 
   renderer.toneMapping = THREE.Uncharted2ToneMapping;
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(WIDTH, HEIGHT);
-  document.getElementById(domStrings.webglContainer).appendChild(renderer.domElement); 
+  document.getElementById(domStrings.webglContainer).appendChild(renderer.domElement);
   var scene = new THREE.Scene();
   renderer.autoClear = false;
 
@@ -77,134 +84,6 @@ const scene = (function (ui, lights, materials) {
 
   //lightSetup
   var main_grp = new THREE.Group();
-  var pivotMat = materials.initMaterials('basic', 'white');
-  pivotMat.opacity = 0.1;
-  var lightPivot = models.getSphere(pivotMat, 0.01, 24);
-  var hemilightPivot = models.getSphere(pivotMat, 0.1, 24);
-  var light = lights.getPointLight(0);
-
-  light.position.y = 0.75;
-  light.position.z = 1.68;
-  light.position.x = 1.20;
-  light.castShadow = true;
-
-  main_grp.add(light);
-
-  var dirPivot = models.getSphere(pivotMat, 1, 24);
-  var directionalLight = new lights.getDirectionalLight(0xffffff, 0.5);
-  directionalLight.castShadow = true;
-  // directionalLight.position.set( 0, 1, 0 ); 	
-  // directionalLight.add(dirPivot);
-  directionalLight.position.x = -10;
-  directionalLight.intensity = 0.5;
-  directionalLight.position.z = 2;
-  directionalLight.position.y = 4;
-  main_grp.add(directionalLight);
-
-  var video = document.getElementById('video');
-  // video.play();
-  var videoTexture = new THREE.VideoTexture(video);
-  var VidParameters = { color: 0xffffff, map: videoTexture };
-  videoTexture.minFilter = THREE.NearestFilter;
-  videoTexture.magFilter = THREE.NearestFilter;
-  videoTexture.format = THREE.RGBFormat;
-  var vidMaterial = new THREE.MeshLambertMaterial(VidParameters);
-
-
-  var screenLight = new THREE.RectAreaLight(0xA4E5FF, 0, 0.7, 0.4);
-  screenLight.position.z = -1.76;
-  screenLight.position.y = 1.1;
-  screenLight.rotation.y = Math.PI;
-
-  main_grp.add(screenLight);
-
-  var windowlight = new THREE.RectAreaLight(0xffffff, 2, 2.2, 1.2);
-  var windowlightHelper = new THREE.RectAreaLightHelper(windowlight);
-  windowlight.add(windowlightHelper);
-  windowlight.rotation.y = -Math.PI / 2;
-  windowlight.position.y = 1.66;
-  windowlight.position.z = 0;
-  windowlight.position.x = -3.25;
-  main_grp.add(windowlight);
-
-
-  var squaredLight = new THREE.RectAreaLight(0x99d6ff, 0, 5, 0.05);
-  squaredLight.rotation.y = Math.PI;
-  squaredLight.position.y = 2.7;
-  squaredLight.position.z = -1.7;
-  squaredLight.position.x = 0;
-
-  main_grp.add(squaredLight);
-
-  var squaredLight2 = new THREE.RectAreaLight(0x99d6ff, 0, 2.8, 0.05);
-  squaredLight2.rotation.y = -Math.PI / 2;
-  squaredLight2.position.y = 2.7;
-  squaredLight2.position.z = 0;
-  squaredLight2.position.x = -2.7;
-
-  main_grp.add(squaredLight2);
-
-  var squaredLight3 = new THREE.RectAreaLight(0x99d6ff, 0, 5, 0.05);
-  squaredLight3.position.y = 2.7;
-  squaredLight3.position.z = 1.7;
-  squaredLight3.position.x = 0;
-
-  main_grp.add(squaredLight3);
-
-  var squaredLight4 = new THREE.RectAreaLight(0x99d6ff, 0, 2.8, 0.05);
-  squaredLight4.rotation.y = Math.PI / 2;
-  squaredLight4.position.y = 2.7;
-  squaredLight4.position.z = 0;
-  squaredLight4.position.x = 2.7;
-
-  main_grp.add(squaredLight4);
-
-
-
-
-  var dayPointLight = lights.getDayPointLight(0.3);
-  dayPointLight.position.x = -1.7;
-  dayPointLight.position.y = 0.5;
-  scene.add(dayPointLight);
-
-  var dayPointLight2 = lights.getDayPointLight(0.16);
-  dayPointLight2.position.x = 1.4;
-  dayPointLight2.position.z = -0.6;
-  dayPointLight2.position.y = 0.5;
-  dayPointLight2.distance = 3;
-  scene.add(dayPointLight2);
-
-  var hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.05);
-  hemiLight.color.setHSL(0.6, 1, 0.6);
-  hemiLight.groundColor.setHSL(204, 100, 71);
-
-  main_grp.add(hemiLight);
-
-  var sealingLamp = lights.getSealingLight(0);
-  sealingLamp.position.y = 2.45;
-  sealingLamp.position.z = -1.7;
-  sealingLamp.position.x = 0.98;
-  main_grp.add(sealingLamp);
-
-  var sealingLamp2 = lights.getSealingLight(0);
-  sealingLamp2.position.y = 2.45;
-  sealingLamp2.position.z = -1.7;
-  sealingLamp2.position.x = -1.03;
-  main_grp.add(sealingLamp2);
-
-  var sealingLamp3 = lights.getSealingLight(0);
-
-  sealingLamp3.position.y = 2.45;
-  sealingLamp3.position.z = 1.73;
-  sealingLamp3.position.x = 0.98;
-  main_grp.add(sealingLamp3);
-
-  var sealingLamp4 = lights.getSealingLight(0);
-
-  sealingLamp4.position.y = 2.45;
-  sealingLamp4.position.z = 1.73;
-  sealingLamp4.position.x = -1.03;
-  main_grp.add(sealingLamp4);
 
   function switchToNight() {
     if (this.checked) {
@@ -217,203 +96,126 @@ const scene = (function (ui, lights, materials) {
   function nightStyle() {
     stateIconDay.style.opacity = 0;
     stateIconNight.style.opacity = 1;
-    var sc = scene.getObjectByName('screen');
-    sc.material.color = new THREE.Color(0xffffff);
-    var kol = scene.getObjectByName('kolpak');
-    kol.material.color = new THREE.Color('gray'); 
-    let glasses = scene.getObjectByName('glass');
-    glasses.material.color = new THREE.Color(0xffffff);
-
-    dayPointLight.intensity = 0
-    dayPointLight2.intensity = 0;
-    windowlight.intensity = 0;
-    directionalLight.intensity = 0;
-    hemiLight.intensity = 0;
-    windowlightHelper.color = new THREE.Color(0x000000);
-    windowlightHelper.update();
-
-    sealingLamp.intensity = 0.2;
-    sealingLamp2.intensity = 0.2;
-    sealingLamp3.intensity = 0.2;
-    sealingLamp4.intensity = 0.2;
-    screenLight.intensity = 2;
-    light.intensity = 0.3;
-    squaredLight.intensity = 10;
-    squaredLight2.intensity = 10;
-    squaredLight3.intensity = 10;
-    squaredLight4.intensity = 10;
+    rmSwitch('night');
   }
   function dayStyle() {
     stateIconDay.style.opacity = 1;
     stateIconNight.style.opacity = 0;
-    var sc = scene.getObjectByName('screen');
-    sc.material.color = new THREE.Color(0x000000);
+    rmSwitch('day');
+  }
+  // const lightControls = {
+  //   room = {
+  //     roomNightSrc: textureLoader.load('./assets/images/textures/room/room_nightlightmap.png'),
+  //     roomDaySrc: textureLoader.load('./assets/images/textures/room/room_lightmap.png')
+  //   }
+  // }
+  // console.log(lightControls);
+  function rmSwitch(type) {
+    var roomNightSrc = textureLoader.load('./assets/images/textures/room/room_nightlightmap.png');
+    var roomDaySrc = textureLoader.load('./assets/images/textures/room/room_lightmap.png');
 
-    var kol = scene.getObjectByName('kolpak');
-    kol.material.color = new THREE.Color(0x333333); 
+    var furNightSrc = textureLoader.load('./assets/images/textures/furniture/fur_nightlightmap.png');
+    var furDaySrc = textureLoader.load('./assets/images/textures/furniture/fur_lightmap.png');
 
-    let glasses = scene.getObjectByName('glass');
-    glasses.material.color = new THREE.Color(0x000000);
+    var screenNightSrc = textureLoader.load('./assets/images/textures/reflector/reflector_nightlightmap.png');
+    var screenDaySrc = textureLoader.load('./assets/images/textures/reflector/reflector_lightmap.png');
 
-    light.intensity = 0;
-    squaredLight.intensity = 0;
-    squaredLight2.intensity = 0;
-    squaredLight3.intensity = 0;
-    squaredLight4.intensity = 0;
-    screenLight.intensity = 0;
+    var fabNightSrc = textureLoader.load('./assets/images/textures/fabrics/fabrick_nightlightmap.png');
+    var fabDaySrc = textureLoader.load('./assets/images/textures/fabrics/fabrick_lightmap.png');
 
-    sealingLamp.intensity = 0;
-    sealingLamp2.intensity = 0;
-    sealingLamp3.intensity = 0;
-    sealingLamp4.intensity = 0;
-    windowlightHelper.color = new THREE.Color(0xccebff);
-    windowlightHelper.update();
-    hemiLight.intensity = 0.05;
-    directionalLight.intensity = 0.5;
-    windowlight.intensity = 2;
-    dayPointLight.intensity = 0.3;
-    dayPointLight2.intensity = 0.16;
+    var cursNightSrc = textureLoader.load('./assets/images/textures/curtains/curtains_nightlightmap.png');
+    var cursDaySrc = textureLoader.load('./assets/images/textures/curtains/curtains_lightmap.png');
+
+    var stuffNightSrc = textureLoader.load('./assets/images/textures/lamps/stuff_nightlightmap.png');
+    var stuffDaySrc = textureLoader.load('./assets/images/textures/lamps/stuff_lightmap.png');
+
+    var books2NightSrc = textureLoader.load('./assets/images/textures/books/books_2_nightlightmap.png');
+    var books2DaySrc = textureLoader.load('./assets/images/textures/books/books_2_lightmap.png');
+
+    var kompNightSrc = textureLoader.load('./assets/images/textures/pc_nightlightmap.png');
+    var kompDaySrc = textureLoader.load('./assets/images/textures/pc_lightmap.png');
+
+    var booksNightSrc = textureLoader.load('./assets/images/textures/books/books_nightlightmap_2k.png');
+    var booksDaySrc = textureLoader.load('./assets/images/textures/books/books_lightmap_2k.png');
+
+    var plantNightSrc = textureLoader.load('./assets/images/textures/plant/plant_nightlightmap.png');
+    var plantDaySrc = textureLoader.load('./assets/images/textures/plant/plant_lightmap.png');
+
+    var windowPlaneNightSrc = textureLoader.load('./assets/images/textures/trees_night.png');
+    var windowPlaneDaySrc = textureLoader.load('./assets/images/textures/trees.png');
+    
+    let sArr = [];
+    var sc = scene.getObjectByName('room_base');
+    var fur = scene.getObjectByName('furz');
+    var ref = scene.getObjectByName('screen');
+    var fabs = scene.getObjectByName('fabs')
+    var curs = scene.getObjectByName('curtains1');
+    var lamps = scene.getObjectByName('stuff');
+    var books2 = scene.getObjectByName('books_2');
+    var komp = scene.getObjectByName('komp');
+    var books1 = scene.getObjectByName('books_1');
+    var plant = scene.getObjectByName('plant');
+    var windowPlane = scene.getObjectByName('pPlane1');
+    sArr.push(sc,fur,ref,curs,lamps,books2,komp,books1,plant,windowPlane);
+    for(let i = 0; i < sArr.length; i++) {
+      sArr[i].needsUpdate = true;
+    }
+
+    console.log(sArr);
+
+
+    switch (type) {
+      case 'day':
+        sc.material.lightMap = roomDaySrc;
+        fur.material.lightMap = furDaySrc;
+        ref.material.lightMap = screenDaySrc;
+        fabs.material.lightMap = fabDaySrc;
+        curs.material.lightMap = cursDaySrc;
+        lamps.material.lightMap = stuffDaySrc;
+        books2.material.lightMap = books2DaySrc;
+        komp.material.lightMap = kompDaySrc;
+        books1.material.lightMap = booksDaySrc;
+        plant.material.lightMap = plantDaySrc;
+        windowPlane.material.map = windowPlaneDaySrc;
+        break;
+      case 'night':
+        sc.material.lightMap = roomNightSrc;
+        fur.material.lightMap = furNightSrc;
+        ref.material.lightMap = screenNightSrc;
+        fabs.material.lightMap = fabNightSrc;
+        curs.material.lightMap = cursNightSrc;
+        lamps.material.lightMap = stuffNightSrc;
+        books2.material.lightMap = books2NightSrc;
+        komp.material.lightMap = kompNightSrc;
+        books1.material.lightMap = booksNightSrc;
+        plant.material.lightMap = plantNightSrc;
+        windowPlane.material.map = windowPlaneNightSrc;
+
+        break;
+      default:
+        sc.material.lightMap = roomDaySrc;
+        fur.material.lightMap = furDaySrc;
+        ref.material.lightMap = screenDaySrc;
+        fabs.material.lightMap = fabDaySrc;
+        curs.material.lightMap = cursDaySrc;
+        lamps.material.lightMap = stuffDaySrc;
+        books2.material.lightMap = books2DaySrc;
+        komp.material.lightMap = kompDaySrc;
+        books1.material.lightMap = booksDaySrc;
+        plant.material.lightMap = plantDaySrc;
+        break;
+    }
   }
 
 
-  // loader.load('./assets/models/screen.fbx', function (object) {
+  const windowPlane = models.loadWindow();
+  main_grp.add(windowPlane);
+  console.log(windowPlane);
 
+  const all = models.loadAll();
+  main_grp.add(all);
 
-  //   object.traverse(function (child) {
-  //     if (child.isMesh) {
-  //       child.material = vidMaterial;
-  //       child.castShadow = true;
-  //       child.receiveShadow = false;
-  //     }
-
-  //   });
-
-  //   main_grp.add(object);
-  // });
-
-  //   var geom = new THREE.PlaneGeometry( 1.6, 0.9, 32 );
-  // var videoScreen = new THREE.Mesh( geom, vidMaterial );
-  // main_grp.add( videoScreen );
-  // videoScreen.position.y = 1.2;
-  // videoScreen.position.z = -1.6;
-
-  // var position = new THREE.Vector3().copy(screenLight.position);
-  // screenLight.localToWorld(position);
-  // camera.lookAt(position);
-
-
-
-  // var bMat = materials.initMaterials('standard', 'blue');
-  // var b = models.getBox(bMat, 1, 1, 1);
-  // scene.add(b);
-  // var mashMat = materials.initMaterials('standard', 0xffffff);
-  // mashMat.roughness = 1;
-  // loader.load('./assets/models/mash_h.fbx', function (object) {
-  //   // scene.add(gltf.scene);
-  //   let triggerBtn = document.getElementById('playSound');
-  //   let muteSoundBtn = document.getElementById('muteSound');
-
-  //   object.material = mashMat;
-  //   object.castShadow = true;
-  //   object.receiveShadow = true;
-
-  //   object.traverse(function (child) {
-  //     if (child instanceof THREE.Mesh) {
-  //       child.material = mashMat;
-  //       child.castShadow = true;
-  //       child.receiveShadow = true;
-  //     }
-  //   });
-
-  //   mixer = new THREE.AnimationMixer(object);
-  //   animationClip = mixer.clipAction(object.animations[0]);
-
-  //   animationClip.clampWhenFinished = false;
-  //   animationClip.setLoop(THREE.LoopOnce);
-
-  //   mixer.addEventListener("finished", function (e) {
-  //     triggerBtn.checked = false;
-  //     audio.pause();
-  //     audio.currentTime = 0;
-  //     isPlay = !isPlay;
-  //     var curAction = e.action;
-  //     setTimeout(function () {
-  //       curAction = e.action;
-  //       curAction.stop();
-  //     }, 0);
-  //   });
-
-  //   mashGrp.add(object);
-  //   mashGrp.scale.x = 1;
-  //   mashGrp.scale.y = 1;
-  //   mashGrp.scale.z = 1;
-  //   mashGrp.position.y = 10;
-  //   mashGrp.position.z = 0;
-
-  //   muteSoundBtn.addEventListener('click', () => {
-  //     audio.muted = !audio.muted;
-  //   });
-  //   triggerBtn.addEventListener('click', () => {
-
-  //     isPlay = !isPlay;
-
-  //     if (isPlay) {
-  //       animationClip.enabled = true;
-  //       animationClip.paused = false;
-  //       animationClip.timeScale = 1;
-  //       animationClip.play();
-
-  //       // deactivateActions(animationClip);
-
-  //     } else {
-  //       animationClip.paused = true;
-
-  //       // activateActions(animationClip);
-  //     }
-  //     return audio.paused ? audio.play() : audio.pause();
-  //   });
-
-  //   mashGrp.position.y = 0;
-  //   mashGrp.position.y = 5;
-  //   mashGrp.add(object);
-
-  // });
-  // scene.add(mashGrp);
-
-  const deactivateActions = function (action) {
-    action.paused = true;
-  }
-  const activateActions = function (action) {
-    action.paused = false;
-    action.timeScale = 20;
-    action.setLoop(THREE.LoopOnce);
-    // action.clampWhenFinished = true;
-    action.play();
-  }
-
-  const room = models.loadroom();
-  main_grp.add(room);
-
-  const furniture = models.loadMobel();
-  main_grp.add(furniture);
-
-  const pc = models.loadPC();
-  main_grp.add(pc);
-
-  const fabrics = models.loadFabrics();
-  main_grp.add(fabrics);
-
-
-  const stuff = models.loadStuff();
-  main_grp.add(stuff);
-
-  // const books = models.loadBooks();
-  // main_grp.add(books);
-
-  // const plant = models.loadPlant();
-  // main_grp.add(plant);
-
-  var mirr = new THREE.PlaneBufferGeometry(0.49, 1.26);
+  var mirr = new THREE.PlaneBufferGeometry(0.98, 2);
   var verticalMirror = new Reflector(mirr, {
     clipBias: 0.003,
     textureWidth: WIDTH * window.devicePixelRatio,
@@ -421,136 +223,44 @@ const scene = (function (ui, lights, materials) {
     color: 0x889999,
     recursion: 1
   });
-  main_grp.add(verticalMirror);
-  verticalMirror.position.x = 2.355;
-  verticalMirror.position.y = 1.405;
-  verticalMirror.position.z = 0.74;
+  verticalMirror.position.x = 2.38;
+  verticalMirror.position.y = 1.1;
+  verticalMirror.position.z = 1.48;
   verticalMirror.rotation.y = -Math.PI / 2;
 
-  var mirr2 = new THREE.PlaneBufferGeometry(0.49, 1.26);
-  var verticalMirror2 = new Reflector(mirr2, {
-    clipBias: 0.003,
-    textureWidth: WIDTH * window.devicePixelRatio,
-    textureHeight: HEIGHT * window.devicePixelRatio,
-    color: 0x889999,
-    recursion: 1
-  });
-  main_grp.add(verticalMirror2);
-  verticalMirror2.position.x = 2.355;
-  verticalMirror2.position.y = 1.405;
-  verticalMirror2.position.z = 1.238;
-  verticalMirror2.rotation.y = -Math.PI / 2;
-
-  var mirr3 = new THREE.PlaneBufferGeometry(0.49, 0.65);
-  var verticalMirror3 = new Reflector(mirr3, {
-    clipBias: 0.003,
-    textureWidth: WIDTH * window.devicePixelRatio,
-    textureHeight: HEIGHT * window.devicePixelRatio,
-    color: 0x889999,
-    recursion: 1
-  });
-  main_grp.add(verticalMirror3);
-  verticalMirror3.position.x = 2.355;
-  verticalMirror3.position.y = 0.41;
-  verticalMirror3.position.z = 1.238;
-  verticalMirror3.rotation.y = -Math.PI / 2;
-
-  var mirr4 = new THREE.PlaneBufferGeometry(0.49, 0.65);
-  var verticalMirror4 = new Reflector(mirr4, {
-    clipBias: 0.003,
-    textureWidth: WIDTH * window.devicePixelRatio,
-    textureHeight: HEIGHT * window.devicePixelRatio,
-    color: 0x889999,
-    recursion: 1
-  });
-  main_grp.add(verticalMirror4);
-  verticalMirror4.position.x = 2.355;
-  verticalMirror4.position.y = 0.41;
-  verticalMirror4.position.z = 0.74;
-  verticalMirror4.rotation.y = -Math.PI / 2;
-
-
-  // const tree = models.loadTree();
-  // main_grp.add(tree);
-
-  main_grp.position.y = -1; 
+  main_grp.add(verticalMirror);
+  main_grp.position.y = -0.8;
   scene.add(main_grp);
 
  
 
 
+  var gui = new GUI();
 
-  // var gui = new GUI();
+  gui.add(params, 'exposure', 0.1, 2).onChange(function (value) {
 
-  // gui.add(light, 'intensity', 0, 10);
-  // gui.add(screenLight, 'intensity', 0, 10);
-  // gui.add(squaredLight, 'intensity', 0, 30);
-  // gui.add(squaredLight2, 'intensity', 0, 30);
-  // gui.add(squaredLight3, 'intensity', 0, 30);
-  // gui.add(squaredLight4, 'intensity', 0, 30);
-  // gui.add(windowlight, 'intensity', 0, 100);
-  // gui.add(directionalLight, 'intensity', 0, 100);
+    renderer.toneMappingExposure = Math.pow(value, 4.0);
 
-  // gui.add(directionalLight.position, 'x', -50.00, 50.00);
-  // gui.add(directionalLight.position, 'y', -50.00, 50.00);
-  // gui.add(directionalLight.position, 'z', -50.00, 50.00);
+  });
 
-  // gui.add(hemiLight.position, 'z', -50.00, 50.00);
-  // gui.add(hemiLight.position, 'x', -50.00, 50.00);
-  // gui.add(hemiLight.position, 'y', -50.00, 50.00);
+  gui.add(params, 'bloomThreshold', 0.0, 1.0).onChange(function (value) {
 
-  // gui.add(screenLight.position, 'z', -2, 10);
-  // gui.add(screenLight.position, 'y', -2, 10);
-  // gui.add(main_grp.position, 'y', -20, 20);
+    bloomPass.threshold = Number(value);
 
-  // gui.add(light.position, 'y', 0.00, 10.00);
-  // gui.add(light.position, 'z', -2.00, 10.00);
-  // gui.add(light.position, 'x', -2.00, 10.00);
-  // gui.add(screenLight, 'distance', 0, 10.00);
-  // gui.add(screenLight.shadow.camera, 'near', 0, 100.00);
-  // gui.add(audio, 'volume', 0, 1);
-  // gui.add(effectController, "focus", 1.0, 3000.0, 1).onChange(matChanger);
-  // gui.add(effectController, "aperture", 0, 10, 0.1).onChange(matChanger);
-  // gui.add(effectController, "maxblur", 0.0, 3.0, 0.025).onChange(matChanger);
-  // matChanger(); 
+  });
 
-  // var folder1 = gui.addFolder('DayLights');
-  // folder1.add(directionalLight, 'intensity', 0, 10);
-  // folder1.add(windowlight, 'intensity', 0, 10);
-  // folder1.add(dayPointLight, 'intensity', 0, 10);
-  // folder1.add(dayPointLight2, 'intensity', 0, 10);
+  gui.add(params, 'bloomStrength', 0.0, 3.0).onChange(function (value) {
 
-  // var folder2 = gui.addFolder('NightLights');
-  // folder2.add(light, 'intensity', 0, 10);
-  // folder2.add(sealingLamp, 'intensity', 0, 10);
+    bloomPass.strength = Number(value);
 
-  
+  });
 
+  gui.add(params, 'bloomRadius', 0.0, 1.0).step(0.01).onChange(function (value) {
 
-  // gui.add(params, 'exposure', 0.1, 2).onChange(function (value) {
+    bloomPass.radius = Number(value);
 
-  //   renderer.toneMappingExposure = Math.pow(value, 4.0);
-
-  // });
-
-  // gui.add(params, 'bloomThreshold', 0.0, 1.0).onChange(function (value) {
-
-  //   bloomPass.threshold = Number(value);
-
-  // });
-
-  // gui.add(params, 'bloomStrength', 0.0, 3.0).onChange(function (value) {
-
-  //   bloomPass.strength = Number(value);
-
-  // });
-
-  // gui.add(params, 'bloomRadius', 0.0, 1.0).step(0.01).onChange(function (value) {
-
-  //   bloomPass.radius = Number(value);
-
-  // });
-  // gui.open();
+  });
+  gui.open();
 
   window.onresize = function () {
     var width = window.innerWidth;
@@ -596,7 +306,7 @@ const scene = (function (ui, lights, materials) {
 })(ui, lights, materials);
 scene.init();
 
- 
+
 
 
 

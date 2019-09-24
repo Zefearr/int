@@ -621,7 +621,7 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #7F939F;
+  background-color: gray;
   transition: .3s;
   /* box-shadow:2px 2px 2px #5B6F7F inset; */
 }
@@ -638,7 +638,7 @@ body {
 }
 
 input:checked + .slider {
-  background-color: #2196F3;
+  background-color: #24253D;
     /* box-shadow:2px 2px 2px black inset; */
 }
 

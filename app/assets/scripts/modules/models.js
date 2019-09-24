@@ -23,276 +23,159 @@ export const models = (function () {
       return obj;
     },
 
-    loadroom: function () {
-      var roomGrp = new THREE.Group();
-      loader.load('./assets/models/room_base.fbx', function (object) {
+    
+    
+    
+    
+  
+    
+    loadWindow: function() {
+      var windowGrp = new THREE.Group();
 
+      loader.load('./assets/models/windowplane.fbx', function (object) {
+        var windowMat = materials.initMaterials('basic', 'white');
+        windowMat.map = textureLoader.load('./assets/images/textures/trees.png');
+        windowMat.transparent = true;
+        windowMat.alphaMap = textureLoader.load('./assets/images/textures/trees.png');
+
+
+        object.material = windowMat;
+        object.traverse(function(child){
+          if(child instanceof THREE.Mesh) {
+            child.material = windowMat;
+          }
+        })
+        windowGrp.add(object);
+      });
+      return windowGrp;
+    },
+   
+    
+    loadAll: function () {
+      var baseGrp = new THREE.Group();
+      loader.load('./assets/models/room_plus_stuff.fbx', function (object) {
+
+        var uvs = object.children[0].geometry.attributes.uv.array;
+        object.children[0].geometry.addAttribute('uv2', new THREE.BufferAttribute(uvs, 2));
         var roomMat = materials.initMaterials('standard', 'white');
-        roomMat.map = textureLoader.load('./assets/images/textures/room/room_diff.jpg');  
-        roomMat.normalMap = textureLoader.load('./assets/images/textures/room/room_normals.png');
-        roomMat.metalnessMap = textureLoader.load('./assets/images/textures/room/room_metalness.jpg');
-        roomMat.roughness = 1; 
-        roomMat.roughnessMap  = textureLoader.load('./assets/images/textures/room/room_roughness.jpg');
-        roomMat.normalScale = new THREE.Vector2(1, 1);
+        roomMat.lightMap = textureLoader.load('./assets/images/textures/room/room_lightmap.png');
+        roomMat.lightMapIntensity = 0.8;
+        roomMat.metalnessMap = textureLoader.load('./assets/images/textures/room/roombase_metallic.jpg');
+
+        var uvs2 = object.children[1].geometry.attributes.uv.array;
+        object.children[1].geometry.addAttribute('uv2', new THREE.BufferAttribute(uvs2, 2));
+        var mobelMat = materials.initMaterials('standard', 'white');
+        mobelMat.lightMap = textureLoader.load('./assets/images/textures/furniture/fur_lightmap.png');
+        mobelMat.lightMapIntensity = 0.7;
+        mobelMat.metalness = 0;
+
+   
+
+        var fabricMat = materials.initMaterials('standard', 'white');
+        var uvs3 = object.children[2].geometry.attributes.uv.array;
+        object.children[2].geometry.addAttribute('uv2', new THREE.BufferAttribute(uvs3, 2));
+        fabricMat.lightMap = textureLoader.load('./assets/images/textures/fabrics/fabrick_lightmap.png');
+        fabricMat.metalness = 0;
+
+
+        var curtainsMat = materials.initMaterials('standard', 'white');
+        curtainsMat.side = THREE.DoubleSide;
+        var uvs4 = object.children[3].geometry.attributes.uv.array;
+        object.children[3].geometry.addAttribute('uv2', new THREE.BufferAttribute(uvs4, 2));
+        curtainsMat.lightMap = textureLoader.load('./assets/images/textures/curtains/curtains_lightmap.png');
+        curtainsMat.metalnessMap = textureLoader.load('./assets/images/textures/curtains/curtains_metallic.jpg');
+
+   
+
+        var pcMat = materials.initMaterials('standard', 'white');
+        var uvs5 = object.children[4].geometry.attributes.uv.array;
+        object.children[4].geometry.addAttribute('uv2', new THREE.BufferAttribute(uvs5, 2));
+        pcMat.lightMap = textureLoader.load('./assets/images/textures/pc_lightmap.png');
+        pcMat.metalnessMap = textureLoader.load('./assets/images/textures/pc_metalness.png');
+
+        var plantMat = materials.initMaterials('standard', 'white');
+        plantMat.side = THREE.DoubleSide;
+        var uvs6 = object.children[5].geometry.attributes.uv.array;
+        object.children[5].geometry.addAttribute('uv2', new THREE.BufferAttribute(uvs6, 2));
+        plantMat.lightMap = textureLoader.load('./assets/images/textures/plant/plant_lightmap.png');
+
+        var booksMat = materials.initMaterials('standard', 'white');
+        var uvs7 = object.children[6].geometry.attributes.uv.array;
+   
+        object.children[6].geometry.addAttribute('uv2', new THREE.BufferAttribute(uvs7, 2));
+        booksMat.lightMap = textureLoader.load('./assets/images/textures/books/books_lightmap_2k.png'); 
+        booksMat.metalness = 0;
+        // booksMat.map = textureLoader.load('./assets/images/textures/books/books_diff.jpg'); 
+
+        var stuffMat = materials.initMaterials('standard', 'white');
+        var uvs8 = object.children[7].geometry.attributes.uv.array;
+     
+        object.children[7].geometry.addAttribute('uv2', new THREE.BufferAttribute(uvs8, 2));
+        stuffMat.lightMap = textureLoader.load('./assets/images/textures/lamps/stuff_lightmap.png'); 
+        stuffMat.metalnessMap = textureLoader.load('./assets/images/textures/lamps/stuffs1_metallic.jpg'); 
+
+        var books2Mat = materials.initMaterials('standard', 'white');
+        var uvs9 = object.children[8].geometry.attributes.uv.array;
+     
+        object.children[8].geometry.addAttribute('uv2', new THREE.BufferAttribute(uvs9, 2));
+        books2Mat.lightMap = textureLoader.load('./assets/images/textures/books/books_2_lightmap.png'); 
+        books2Mat.metalness = 0;
+
+
+        var screenMat = materials.initMaterials('standard', 'white');
+        var uvs10 = object.children[9].geometry.attributes.uv.array;
+     
+        object.children[9].geometry.addAttribute('uv2', new THREE.BufferAttribute(uvs10, 2));
+        screenMat.lightMap = textureLoader.load('./assets/images/textures/reflector/reflector_lightmap.png'); 
+        screenMat.metalness = 0;
+
+
+
         object.material = roomMat;
-        object.castShadow = true;
+        object.castShadow = true; 
         object.receiveShadow = true;
-        object.traverse(function (child) { 
-          if (child instanceof THREE.Mesh) {
+        baseGrp.add(object);
+        object.traverse(function (child) {
+          if (child.name === 'room_base') {
             child.material = roomMat;
             child.castShadow = true;
             child.receiveShadow = true;
-          }
-          if (child.name === 'handler1') { 
-            var handlerMat = materials.initMaterials('lambert', 0x99d6ff);
-            handlerMat.emissive = new THREE.Color(0x99d6ff);
-            handlerMat.emissiveIntensity = 20;
-            child.material = handlerMat;
-          } 
-        });
-        roomGrp.add(object);
-      });
-      return roomGrp;
-    }, 
-    loadPC: function () {
-      var pcGrp = new THREE.Group();
-      loader.load('./assets/models/kompp.fbx', function (object) {
-        var pcMat = materials.initMaterials('standard', 'white');
-        var screenMat = materials.initMaterials('basic', 0x000000);
-        screenMat.map = textureLoader.load('./assets/images/screen.jpg');
-
-        pcMat.map = textureLoader.load('./assets/images/textures/pc_diff.png');
-        pcMat.normalMap = textureLoader.load('./assets/images/textures/pc_normal.png');
-        pcMat.metalnessMap = textureLoader.load('./assets/images/textures/pc_metalness.png');
-
-        object.material = pcMat;
-        object.castShadow = true;
-        object.receiveShadow = true;
-        pcGrp.add(object);
-        object.traverse(function (child) {
-          if (child instanceof THREE.Mesh) {
-            child.material = pcMat;
-            child.castShadow = true;
-            child.receiveShadow = true;
-          }
-          if(child.name === 'screen') {
-            child.material = screenMat;
-          }
-
-        })
-      });
-      return pcGrp;
-    },
-    loadFabrics: function () {
-      var fabricGrp = new THREE.Group();
-      loader.load('./assets/models/fabrics.fbx', function (object) {
-        var fabricMat = materials.initMaterials('standard', 'white');
-        
-        fabricMat.map = textureLoader.load('./assets/images/textures/fabrics/fabrics_albedo.jpg');
-        fabricMat.metalness = 0;
-        fabricMat.normalMap = textureLoader.load('./assets/images/textures/fabrics/fabrics_normal.png'); 
-        fabricMat.normalScale = new THREE.Vector2(0.5, 0.5);
-        fabricMat.roughness = 1;
-        fabricMat.roughnessMap = textureLoader.load('./assets/images/textures/fabrics/fabrics_roughness.jpg'); 
-
-        object.material = fabricMat;
-
-        object.castShadow = true;
-        object.receiveShadow = true;
-        fabricGrp.add(object);
-        object.traverse(function (child) {
-          if (child instanceof THREE.Mesh) {
+          } else if (child.name === 'fabs') {
             child.material = fabricMat;
             child.castShadow = true;
             child.receiveShadow = true;
-          }
-        });
-      });
-      return fabricGrp;
-    },
-    loadStuff: function () {
-      var stuffGrp = new THREE.Group();
-      loader.load('./assets/models/stuff.fbx', function (object) {
-        var stuffMat = materials.initMaterials('standard', 'white');
-        var glassMat = materials.initMaterials('basic', 'black');
-        var kolpakMat = materials.initMaterials('basic', 0x333333);
-        var karnizMat = materials.initMaterials('standard', 0xffffff);
-        karnizMat.roughness = 0.6;
-        karnizMat.metalness = 0;
-        var plantMat = materials.initMaterials('standard', 'white');
-        plantMat.side = THREE.DoubleSide;
-        plantMat.map = textureLoader.load('./assets/images/textures/plant/plant_diff.jpg');
-        plantMat.normalMap = textureLoader.load('./assets/images/textures/plant/plant_normal.png'); 
-        plantMat.roughness = 1;
-        plantMat.roughnessMap = textureLoader.load('./assets/images/textures/plant/plant_roughness.jpg');
-        plantMat.metalness = 0;
-        var booksMat = materials.initMaterials('standard', 'white');
-        booksMat.map = textureLoader.load('./assets/images/textures/books/books_diff.jpg');
-        booksMat.roughness = 1;
-        booksMat.roughnessMap = textureLoader.load('./assets/images/textures/books/books_roughness.jpg');
-
-        kolpakMat.map = textureLoader.load('./assets/images/textures/stuff/stuffs_albedo.jpg');
-      
-   
-        stuffMat.map = textureLoader.load('./assets/images/textures/stuff/stuffs_albedo.jpg');
-        stuffMat.normalMap = textureLoader.load('./assets/images/textures/stuff/stuffs_normal.png');
-        stuffMat.metalnessMap = textureLoader.load('./assets/images/textures/stuff/stuffs_metallic.jpg');
-        stuffMat.roughness = 1;
-        stuffMat.roughnessMap = textureLoader.load('./assets/images/textures/stuff/stuffs_roughness.jpg');
-    
-        object.material = stuffMat;
-        object.castShadow = true;
-        object.receiveShadow = true;
-        stuffGrp.add(object);
-        object.traverse(function (child) {
-          if (child instanceof THREE.Mesh) {
-            child.material = stuffMat;
-            child.castShadow = true;
-            child.receiveShadow = true;
-          }
-          if (child.name === 'glass') {
-            child.material = glassMat;
-          }
-          if (child.name === 'kolpak') {
-            child.material = kolpakMat;
-            child.castShadow = true;
-            child.receiveShadow = true;
-          }
-          if (child.name === 'plant') {
-            child.material = plantMat; 
-            child.castShadow = true;
-            child.receiveShadow = true;
-          }
-          if (child.name === 'books') {
-            child.material = booksMat; 
-            child.castShadow = true;
-            child.receiveShadow = true;
-          }
-          if (child.name === 'bulb') {
-            child.castShadow = false;
-            child.receiveShadow = false;
-            child.material = glassMat;
-          }
-          if (child.name === 'karniz') {
-            child.material = karnizMat;
-            child.castShadow = true;
-            child.receiveShadow = true;
-          
-          }
-        });
-        
-      });
-      return stuffGrp;
-    },
-    loadMobel: function () {
-      var mGrp = new THREE.Group();
-      loader.load('./assets/models/furniture.fbx', function (object) {
-        
-        var mobelMat = materials.initMaterials('standard', 'white');
-        mobelMat.map = textureLoader.load('./assets/images/textures/furniture/fur_diff.jpg');
-        mobelMat.metalnessMap = textureLoader.load('./assets/images/textures/furniture/fur_metalness.jpg');   
-        mobelMat.roughness = 1;
-        mobelMat.roughnessMap = textureLoader.load('./assets/images/textures/furniture/fur_roughness.jpg');
-        mobelMat.normalMap = textureLoader.load('./assets/images/textures/furniture/fur_normals.png');
-        mobelMat.normalIntensity = new THREE.Vector2(0.5, 0.5); 
-
-        object.material = mobelMat;
-        object.castShadow = true;
-        object.receiveShadow = true;
-        mGrp.add(object);
-        object.traverse(function (child) {
-          if (child instanceof THREE.Mesh) {
+          } else if (child.name === 'furz') {
             child.material = mobelMat;
             child.castShadow = true;
             child.receiveShadow = true;
-          }
-
-        })
-      });
-      return mGrp;
-    },
-    loadPlant: function () {
-      var plantGrp = new THREE.Group();
-      loader.load('./assets/models/plant.fbx', function (object) {
-        
-        var plantMat = materials.initMaterials('standard', 'white');
-        plantMat.map = textureLoader.load('./assets/images/textures/plant/plant_diff.jpg');
-     
-
-        object.material = plantMat;
-        object.castShadow = true;
-        object.receiveShadow = true;
-        plantGrp.add(object); 
-        object.traverse(function (child) {
-          if (child instanceof THREE.Mesh) {
+          } else if (child.name === 'curtains1') {
+            child.material = curtainsMat;
+            child.castShadow = true;
+            child.receiveShadow = true;
+          }  else if (child.name === 'komp') {
+            child.material = pcMat;
+            child.castShadow = true;
+            child.receiveShadow = true;
+          }  else if (child.name === 'plant') {
             child.material = plantMat;
             child.castShadow = true;
             child.receiveShadow = true;
-          }
-
-        })
-      });
-      return plantGrp;
-    },
-    loadTree: function () {
-      var treeGrp = new THREE.Group();
-      loader.load('./assets/models/maple.fbx', function (object) {
-        
-        var barkMat = materials.initMaterials('standard', 'white');
-        var leavesMat = materials.initMaterials('standard', 'white');
-        leavesMat.depthWrite = false;
-        barkMat.map = textureLoader.load('./assets/images/textures/bark_diff.png');
-        leavesMat.map = textureLoader.load('./assets/images/textures/branch_diff.png');
-        leavesMat.side = THREE.DoubleSide;
-        leavesMat.transparent = true;
-        leavesMat.alphaMap = textureLoader.load('./assets/images/textures/branch_diff.png');
-
-        // object.material = barkMat;
-        // object.castShadow = true;
-        // object.receiveShadow = true;
-        treeGrp.add(object); 
-        // object.scale.x = 0.01;
-        // object.scale.y = 0.01;
-        // object.scale.z = 0.01;
-        object.traverse(function (child) {
-          if (child.name === 'bark') {
-            child.material = barkMat;
-            child.castShadow = true;
-            child.receiveShadow = true;
-          } else if(child.name === 'leaves') {
-            child.material = leavesMat;
-            child.castShadow = true;
-            child.receiveShadow = true;
-          }
-
-        })
-      }); 
-      return treeGrp; 
-    },
-
-    loadBooks: function () {
-      var booksGrp = new THREE.Group();
-      loader.load('./assets/models/books.fbx', function (object) {
-      var booksMat = materials.initMaterials('standard', 'white');
-      booksMat.map = textureLoader.load('./assets/images/textures/books/books_diff.jpg');
-      booksMat.roughness = 1;
-      booksMat.roughnessMap = textureLoader.load('./assets/images/textures/books/books_roughness.jpg');
-      object.material = booksMat; 
-      object.castShadow = true;
-      object.receiveShadow = true;
-      booksGrp.add(object);
-        object.traverse(function (child) {
-          if (child instanceof THREE.Mesh) {
+          } else if (child.name === 'books_1') {
             child.material = booksMat;
             child.castShadow = true;
             child.receiveShadow = true;
+          } else if (child.name === 'stuff') {
+            child.material = stuffMat;
+            child.castShadow = true;
+            child.receiveShadow = true;
+          }  else if (child.name === 'books_2') {
+            child.material = books2Mat;
+            child.castShadow = true;
+            child.receiveShadow = true;
           }
         })
       });
-      return booksGrp;
+      return baseGrp;
     }
-
-
-
   }
-})()
+})() 
