@@ -408,7 +408,7 @@ body {
 .splash--inner {
   display:block;
   margin:auto;
- 
+  
   text-align:center;
 }
 
@@ -416,6 +416,11 @@ body {
     content:'';
     display:block;
     clear: both;
+  }
+
+.splash--inner h3 {
+    margin:0;
+    margin-top:5px;
   }
 
 .lds-ellipsis {

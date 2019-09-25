@@ -1,16 +1,21 @@
 import * as THREE from 'three';
-import { RectAreaLightUniformsLib } from 'three/examples/jsm/lights/RectAreaLightUniformsLib.js';
 import { materials } from './modules/materials';
 import { models } from './modules/models';
 import { lights } from './modules/lights';
 import { Reflector } from 'three/examples/jsm/objects/Reflector.js';
 import { GUI } from 'three/examples/jsm/libs/dat.gui.module';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
-
+import Manager from './modules/manager';
+const manager = new Manager();
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { PointerLockControls } from 'three/examples/jsm/controls/PointerLockControls';
+
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
+
+
+
 import About from './modules/about';
 const about = new About();
 // import Manager from './modules/manager';
@@ -32,12 +37,11 @@ const scene = (function (ui, lights, materials) {
   const audio = new Audio();
   var toggleLightsBtn = document.getElementById('lightToggler');
 
-  var scene, camera, clock, renderer, controls, composer, light, params, bloomPass, renderScene, toggleLightsBtn;
-  var sceneMats = [];
-
+  var scene, camera, clock, renderer, controls, composer, params, bloomPass,  renderScene, toggleLightsBtn;
   var WIDTH = window.innerWidth; 
   var HEIGHT = window.innerHeight;
-  RectAreaLightUniformsLib.init();
+  var loader = new FBXLoader(manager);
+
   var params = {
     exposure: 1,
     bloomStrength: 0.3,
@@ -49,7 +53,7 @@ const scene = (function (ui, lights, materials) {
 
   camera = new THREE.PerspectiveCamera(45, WIDTH / HEIGHT, 0.1, 1000);
   camera.position.z = 0;
-  camera.position.x = -3.5;
+  camera.position.x = -3.5
 
   camera.position.y = 0;
 
@@ -65,11 +69,24 @@ const scene = (function (ui, lights, materials) {
   var scene = new THREE.Scene();
   renderer.autoClear = false;
 
+  // var controls = new OrbitControls(camera, renderer.domElement);
   var controls = new OrbitControls(camera, renderer.domElement);
   controls.maxDistance = 10;
-  // controls.maxPolarAngle = Math.PI * 0.495;
+  controls.maxPolarAngle = Math.PI * 0.495;
   controls.enableDamping = true;
   controls.screenSpacePanning = true;
+
+
+  // controls.lookSpeed = 0.1;
+  // controls.movementSpeed = 1;
+  // controls.noFly = true;
+  // controls.lookVertical = true;
+  // controls.constrainVertical = true;
+  // controls.verticalMin = 0;
+  // controls.verticalMax = 3;
+  // controls.lon = -200;
+  // controls.lat = 200;
+
 
   scene.add(camera);
 
@@ -78,11 +95,15 @@ const scene = (function (ui, lights, materials) {
   bloomPass.threshold = params.bloomThreshold;
   bloomPass.strength = params.bloomStrength;
   bloomPass.radius = params.bloomRadius;
+
+ 
   composer = new EffectComposer(renderer);
+
   composer.addPass(renderScene);
   composer.addPass(bloomPass);
 
   //lightSetup
+
   var main_grp = new THREE.Group();
 
   function switchToNight() {
@@ -110,7 +131,21 @@ const scene = (function (ui, lights, materials) {
   //   }
   // }
   // console.log(lightControls);
+  
+
+
+  const windowPlane = models.loadWindow();
+  main_grp.add(windowPlane);
+ 
+
+  const all = models.loadAll();
+  main_grp.add(all);
+
+    
+
   function rmSwitch(type) {
+
+  
     var roomNightSrc = textureLoader.load('./assets/images/textures/room/room_nightlightmap.png');
     var roomDaySrc = textureLoader.load('./assets/images/textures/room/room_lightmap.png');
 
@@ -144,7 +179,7 @@ const scene = (function (ui, lights, materials) {
     var windowPlaneNightSrc = textureLoader.load('./assets/images/textures/trees_night.png');
     var windowPlaneDaySrc = textureLoader.load('./assets/images/textures/trees.png');
     
-    let sArr = [];
+  
     var sc = scene.getObjectByName('room_base');
     var fur = scene.getObjectByName('furz');
     var ref = scene.getObjectByName('screen');
@@ -155,11 +190,7 @@ const scene = (function (ui, lights, materials) {
     var komp = scene.getObjectByName('komp');
     var books1 = scene.getObjectByName('books_1');
     var plant = scene.getObjectByName('plant');
-    var windowPlane = scene.getObjectByName('pPlane1');
-    sArr.push(sc,fur,ref,curs,lamps,books2,komp,books1,plant,windowPlane);
-    for(let i = 0; i < sArr.length; i++) {
-      sArr[i].needsUpdate = true;
-    }
+    var windowPlane = scene.getObjectByName('pPlane1');   
 
     switch (type) {
       case 'day':
@@ -191,25 +222,19 @@ const scene = (function (ui, lights, materials) {
         break;
       default:
         sc.material.lightMap = roomDaySrc;
-        fur.material.lightMap = furDaySrc;
-        ref.material.lightMap = screenDaySrc;
-        fabs.material.lightMap = fabDaySrc;
-        curs.material.lightMap = cursDaySrc;
-        lamps.material.lightMap = stuffDaySrc;
-        books2.material.lightMap = books2DaySrc;
-        komp.material.lightMap = kompDaySrc;
-        books1.material.lightMap = booksDaySrc;
-        plant.material.lightMap = plantDaySrc;
+        // fur.material.lightMap = furDaySrc;
+        // ref.material.lightMap = screenDaySrc;
+        // fabs.material.lightMap = fabDaySrc;
+        // curs.material.lightMap = cursDaySrc;
+        // lamps.material.lightMap = stuffDaySrc;
+        // books2.material.lightMap = books2DaySrc;
+        // komp.material.lightMap = kompDaySrc;
+        // books1.material.lightMap = booksDaySrc;
+        // plant.material.lightMap = plantDaySrc;
         break;
     }
   }
 
-
-  const windowPlane = models.loadWindow();
-  main_grp.add(windowPlane);
- 
-
-  const all = models.loadAll();
   main_grp.add(all);
 
   var mirr = new THREE.PlaneBufferGeometry(0.98, 2);
@@ -226,7 +251,7 @@ const scene = (function (ui, lights, materials) {
   verticalMirror.rotation.y = -Math.PI / 2;
 
   main_grp.add(verticalMirror);
-  main_grp.position.y = -0.8;
+  main_grp.position.y = -1;
   scene.add(main_grp);
 
  
@@ -271,7 +296,8 @@ const scene = (function (ui, lights, materials) {
 
   function animate() {
     requestAnimationFrame(animate);
-    controls.update();
+    var delta = clock.getDelta();
+  
     render();
   }
 
@@ -279,12 +305,14 @@ const scene = (function (ui, lights, materials) {
 
   function onWindowResize() {
     camera.aspect = window.innerWidth / window.innerHeight;
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    // renderer.setSize(window.innerWidth, window.innerHeight);
     composer.setSize(window.innerWidth, window.innerHeight);
     camera.updateProjectionMatrix();
     render();
   }
   function render() {
+  
+    controls.update();
     composer.render();
   }
 

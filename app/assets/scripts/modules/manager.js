@@ -25,7 +25,7 @@ class Manager {
         // console.log( 'Started loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.' );
         spScreen.innerHTML = ` 
               <div class="splash--inner">
-                  <h3>Loading...</h3>
+                  <h3 style="float:left">Loading</h3>
                   <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
               </div>
             
@@ -36,9 +36,9 @@ class Manager {
         var splashScreen = document.querySelector('.splash-screen');
     
         splashScreen.classList.add('dissolving');
-        setTimeout(() => {
-          document.body.removeChild(splashScreen);
-        }, 3000);
+        // setTimeout(() => {
+        //   document.body.removeChild(splashScreen);
+        // }, 2000);
      
       }
     
