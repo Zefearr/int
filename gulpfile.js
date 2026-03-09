@@ -13,7 +13,7 @@ imagemin = require('gulp-imagemin'),
 del = require('del'),
 usemin = require('gulp-usemin'),
 rev = require('gulp-rev'),
-cssnano = require('gulp-cssnano');
+cssnano = require('gulp-cssnano'); 
  
 gulp.task('styles', function() {
   return gulp.src('./app/assets/styles/styles.css')

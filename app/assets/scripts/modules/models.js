@@ -125,8 +125,8 @@ export const models = (function () {
         var screenMat = materials.initMaterials('standard', 'white');
         var uvs10 = object.children[9].geometry.attributes.uv.array;
      
-        object.children[9].geometry.addAttribute('uv2', new THREE.BufferAttribute(uvs10, 2));
-        screenMat.lightMap = textureLoader.load('./assets/images/textures/reflector/reflector_lightmap.png'); 
+        object.children[9].geometry.addAttribute('uv2', new THREE.BufferAttribute(uvs10, 2)); 
+        screenMat.lightMap = textureLoader.load('./assets/images/textures/reflector/reflector_nightlightmap.png'); 
         screenMat.metalness = 0;
 
 

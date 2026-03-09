@@ -41,7 +41,7 @@ const scene = (function (ui, lights, materials) {
   var loader = new FBXLoader(manager);
 
   var params = {
-    exposure: 1,
+    exposure: 1, 
     bloomStrength: 0.3,
     bloomThreshold: 0,
     bloomRadius: 0.7
@@ -143,7 +143,7 @@ const scene = (function (ui, lights, materials) {
     var furDaySrc = textureLoader.load('./assets/images/textures/furniture/fur_lightmap.png');
 
     var screenNightSrc = textureLoader.load('./assets/images/textures/reflector/reflector_nightlightmap.png');
-    var screenDaySrc = textureLoader.load('./assets/images/textures/reflector/reflector_lightmap.png');
+    var screenDaySrc = textureLoader.load('./assets/images/textures/reflector/reflector_nightlightmap.png');
 
     var fabNightSrc = textureLoader.load('./assets/images/textures/fabrics/fabrick_nightlightmap.png');
     var fabDaySrc = textureLoader.load('./assets/images/textures/fabrics/fabrick_lightmap.png');
@@ -167,7 +167,7 @@ const scene = (function (ui, lights, materials) {
     var plantDaySrc = textureLoader.load('./assets/images/textures/plant/plant_lightmap.png');
 
     var windowPlaneNightSrc = textureLoader.load('./assets/images/textures/trees_night.png');
-    var windowPlaneDaySrc = textureLoader.load('./assets/images/textures/trees.png');
+    var windowPlaneDaySrc = textureLoader.load('./assets/images/textures/trees.png'); 
 
 
     var sc = scene.getObjectByName('room_base');
